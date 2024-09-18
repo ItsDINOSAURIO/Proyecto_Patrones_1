@@ -3,34 +3,33 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
-# Ctrl+K+C para comentar
-# Ctrl+K+U para descomentar
-
 # Práctica 1.
+#Se carga la base de datos tanto de entrenamiento como de prueba para utilizar a lo largo del código
 train_data = pd.read_csv(r'D:\\Upiita\6to\Patrones\penguins_training.csv')
 test_data = pd.read_csv(r'D:\\Upiita\6to\Patrones\penguins_testing.csv')
-
+ #Definición de los grupos Sexo y Especie
 Sex = {'MALE': 'green', 'FEMALE': 'magenta'}
 species = {'Adelie Penguin (Pygoscelis adeliae)': 'blue',
            'Chinstrap penguin (Pygoscelis antarctica)': 'green',
            'Gentoo penguin (Pygoscelis papua)': 'red'}
 
-# Matriz de covarianza
+# Matriz de covarianza para método de mahalanobis
 car = train_data[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)']]
 cov = car.cov()
-
+##Definición de funciones
+#Función para sacar el promedio de los valores de las 3 características.
 def carac(val):
     car = val[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)']].values
     prom = np.mean(car, axis=0)
     return prom
-
+#Función para calcular la distancia euclidiana
 def eucl(dato, clases):
     d = []
     for fila in clases:
         dist = np.sqrt(np.sum((dato - fila) ** 2))
         d.append(dist)
     return np.array(d)
-
+#Función para realizar el cálculo de distancia de Mahalanobis
 def mahal(dato, clases):
     d = []
     inv_cov = np.linalg.inv(cov)
@@ -39,22 +38,21 @@ def mahal(dato, clases):
         dist = np.sqrt(np.dot(np.dot(diff.T, inv_cov), diff))
         d.append(dist)
     return np.array(d)
-
+#Función para cálculo de similitud coseno
 def cos(dato, clases):
     d = []
     for fila in clases:
         dist = np.dot(dato, fila) / (np.linalg.norm(dato) * np.linalg.norm(fila))
         d.append(dist)
     return np.array(d)
-
+#Función para la distancia extra de Chebyshev
 def che(dato, clases):
     d = []
     for fila in clases:
         dist=np.max(np.abs(dato-fila))
         d.append(dist)
     return np.array(d)
-
-
+#Función para defendiendo de la clasificación otorgar una nueva clase según los cálculos determinados
 def mind(im, vm,cat):
     if cat == 'Sex':
         if im == 0 and vm < 30:
@@ -72,7 +70,7 @@ def mind(im, vm,cat):
             return 'Gentoo penguin (Pygoscelis papua)'
         else:
             return 'Desconocida'
-
+#Función para generar la tabla con ayuda un DataFrame
 def df(salida):
     tr=pd.DataFrame(salida, columns=['Muestra', 'Clase inicial', 'Clase otorgada (euclidiana)', 'Distancia Euclidiana mínima', 'Clase otorgada (Mahalanobis)', 'Distancia de Mahalanobis mínima', 'Clase otorgada (Cosenos)', 'Mayor similitud por Cosenos','Clase otorgada (Chebyshev)','Distancia de Chebyshev mínima'])
     nf = len(tr)
@@ -101,6 +99,7 @@ clase1 = carac(val)
 val = train_data[train_data['Sex'] == 'FEMALE'] 
 clase2 = carac(val)
 
+#Arreglo de clases para implementación del código
 clases_s = np.array([clase1, clase2])
 
 '''Para Especie'''
@@ -116,12 +115,13 @@ clase2 = carac(val)
 val = train_data[train_data['Species'] == 'Gentoo penguin (Pygoscelis papua)'] 
 clase3 = carac(val)
 
+#Arreglo de clases para implementación del código
 clases_e = np.array([clase1, clase2, clase3])
 
 '''Para Sexo'''
 salida = []
 mue = 1
-
+#For para realizar el cálculo de los distintos métodos de clasificación en el apartado de la clasificación sexual
 for sex, color in Sex.items():
     val = test_data[test_data['Sex'] == sex]
    
@@ -155,14 +155,14 @@ for sex, color in Sex.items():
 
         salida.append([mue, ci, co_e, dm_e, co_m, dm_m, co_c, dm_c,co_ch,dm_ch])
         mue += 1
-
+#Creación de la tabla de salida
 df1 = df(salida)
 #print(df1)
 
 '''Para Especies'''
 salida = []
 mue = 1
-
+#For para realizar el cálculo de los distintos métodos de clasificación en el apartado de la clasificación por especies
 for specie, color in species.items():
     val = test_data[test_data['Species'] == specie]
    
@@ -196,7 +196,7 @@ for specie, color in species.items():
 
         salida.append([mue, ci, co_e, dm_e, co_m, dm_m, co_c, dm_c,co_ch,dm_ch])
         mue += 1
-
+#Creación de la segunda salida
 df2 = df(salida)
 #print(df2)
 
