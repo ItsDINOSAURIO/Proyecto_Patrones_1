@@ -189,7 +189,7 @@ for specie, color in species.items():
         co_c = mind(imin, dm_c,'Species')    
 
         # Chebyshev
-        distch = che(dato, clases_s)
+        distch = che(dato, clases_e)
         imin = np.argmin(distch)
         dm_ch = distch[imin]  
         co_ch = mind(imin, dm_ch,'Species')   
