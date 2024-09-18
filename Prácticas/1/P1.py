@@ -6,7 +6,7 @@ import numpy as np
 # Ctrl+K+C para comentar
 # Ctrl+K+U para descomentar
 
-# Práctica 1. Si realmente se pueden separar machos de hembras, cual característica = culmen depth, solamente dos clases 
+# Práctica 1.
 train_data = pd.read_csv(r'D:\\Upiita\6to\Patrones\penguins_training.csv')
 test_data = pd.read_csv(r'D:\\Upiita\6to\Patrones\penguins_testing.csv')
 
