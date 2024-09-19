@@ -15,11 +15,13 @@ species = {'Adelie Penguin (Pygoscelis adeliae)': 'blue',
 
 # Matriz de covarianza para método de mahalanobis
 car = train_data[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)']]
+# car = train_data[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)','Body Mass (g)']]
 cov = car.cov()
 ##Definición de funciones
 #Función para sacar el promedio de los valores de las 3 características.
 def carac(val):
     car = val[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)']].values
+    # car = val[['Culmen Length (mm)', 'Culmen Depth (mm)', 'Flipper Length (mm)','Body Mass (g)']].values
     prom = np.mean(car, axis=0)
     return prom
 #Función para calcular la distancia euclidiana
@@ -128,6 +130,7 @@ for sex, color in Sex.items():
     for i, fila in val.iterrows():
         ci = fila['Sex']
         dato = [fila['Culmen Length (mm)'], fila['Culmen Depth (mm)'], fila['Flipper Length (mm)']]
+        # dato = [fila['Culmen Length (mm)'], fila['Culmen Depth (mm)'], fila['Flipper Length (mm)'],fila['Body Mass (g)']]
 
         # Euclidiana
         diste = eucl(dato, clases_s)
@@ -169,7 +172,8 @@ for specie, color in species.items():
     for i, fila in val.iterrows():
         ci = fila['Species']
         dato = [fila['Culmen Length (mm)'], fila['Culmen Depth (mm)'], fila['Flipper Length (mm)']]
-
+        # dato = [fila['Culmen Length (mm)'], fila['Culmen Depth (mm)'], fila['Flipper Length (mm)'],fila['Body Mass (g)']]
+        
         # Euclidiana
         diste = eucl(dato, clases_e)
         imin = np.argmin(diste)
